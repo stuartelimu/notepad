@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h4>{{ note.title }}</h4>
+<p>{{ note.timestamp }}</p>
+
+{% if note.url %}
+{{ note.url }}
+{% endif %}
+
+{{ note.image }}
+
+<p>{{ note.description }}</p>
+<a href="{% url 'notes:update' note.pk %}">Edit</a>
+<a href="{% url 'notes:delete' note.pk %}" style="color: red; padding-left: 15px;">Delete</a> <br>
+<a href="{% url 'notes:notes' %}">Back</a>
+{% endblock content %}
