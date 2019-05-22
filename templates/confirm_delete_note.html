@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %} - Delete{% endblock title %}
+
+{% block content %}
+
+<h1>Delete {{ note }}?</h1>
+
+<form action="." method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <input type="submit" value="Delete">
+</form>
+
+<a href="{% url 'notes:notes' %}">Cancel</a>
+
+{% endblock content %}

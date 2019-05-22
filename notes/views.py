@@ -1,57 +1,49 @@
-from django.shortcuts import render, get_object_or_404, redirect, reverse
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import Note
 from .forms import NoteForm
 
 # Create your views here.
-def list_view(request):
-    notes = Note.objects.filter(user=request.user).order_by('-timestamp')
-    context = {
-        'notes': notes,
-    }
+class NoteList(ListView):
+    context_object_name = 'notes'
+    template_name = 'index.html'
 
-    return render(request, 'index.html', context)
+    def get_queryset(self):
+        return Note.objects.filter(user=self.request.user).order_by('-timestamp')
 
-def detail_view(request, pk):
-    note = get_object_or_404(Note, pk=pk)
-    context = {
-        'note': note,
-    }
-    return render(request, 'detail.html', context)
 
-def create_view(request):
-    
-    if request.method == 'POST':
-        form = NoteForm(request.POST or None, request.FILES or None)
-        if form.is_valid():
-            form.instance.user = request.user
-            form.save()
-            return redirect(reverse('notes:detail', kwargs={'pk': form.instance.id }))
-    else:
-        form = NoteForm()
-    context = {
-        'form': form,
-    }
-    return render(request, 'create.html', context)
+class NoteDetail(DetailView):
+    queryset = Note.objects.all()
+    context_object_name = 'note'
+    template_name = 'detail.html'
 
-def update_view(request, pk):
-    note = get_object_or_404(Note, pk=pk)
-    if request.method == 'POST':
-        form = NoteForm(request.POST or None, request.FILES or None, instance=note)
-        if form.is_valid():
-            form.instance.user = request.user
-            form.save()
-            return redirect(reverse('notes:detail', kwargs={'pk': form.instance.id }))
-    else:
-        form = NoteForm(instance=note)
-    context = {
-        'form': form,
-    }
-    return render(request, 'create.html', context)
 
-def delete_view(request, pk):
-    note = get_object_or_404(Note, pk=pk)
-    note.delete()
-    return redirect(reverse('notes:notes'))
+class NoteCreate(CreateView):
+    model = Note
+    fields = ['title', 'url', 'image', 'description']
+    template_name = 'create.html'
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+
+class NoteUpdate(UpdateView):
+    model = Note
+    fields = ['title', 'url', 'image', 'description']
+    template_name = 'create.html'
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+
+class NoteDelete(DeleteView):
+    model = Note
+    success_url = reverse_lazy('notes:notes')
+    template_name = 'confirm_delete_note.html'
+
 
 
 
