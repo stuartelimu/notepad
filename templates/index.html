@@ -21,8 +21,8 @@
       </div>
       <footer class="card-footer">
         <a href="{{ note.get_absolute_url }}" class="card-footer-item">View</a>
-        <a href="{% url 'notes:update' note.pk %}" class="card-footer-item">Edit</a>
-        <a href="{% url 'notes:delete' note.pk %}" class="card-footer-item">Delete</a>
+        <a href="{% url 'notes:update' note.slug %}" class="card-footer-item">Edit</a>
+        <a href="{% url 'notes:delete' note.slug %}" class="card-footer-item">Delete</a>
       </footer>
     </div>
   </div>
