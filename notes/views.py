@@ -22,6 +22,11 @@ class NoteCreate(CreateView):
     fields = ['title', 'body']
     template_name = 'create.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Create'
+        return context
+
 
 class NoteUpdate(UpdateView):
     model = Note
