@@ -6,11 +6,9 @@ from .forms import NoteForm
 
 # Create your views here.
 class NoteList(ListView):
+    model = Note
     context_object_name = 'notes'
     template_name = 'index.html'
-
-    def get_queryset(self):
-        return Note.objects.filter(user=self.request.user).order_by('-timestamp')
 
 
 class NoteDetail(DetailView):
@@ -21,17 +19,13 @@ class NoteDetail(DetailView):
 
 class NoteCreate(CreateView):
     model = Note
-    fields = ['title', 'url', 'image', 'description']
+    fields = ['title', 'body']
     template_name = 'create.html'
-
-    def form_valid(self, form):
-        form.instance.user = self.request.user
-        return super().form_valid(form)
 
 
 class NoteUpdate(UpdateView):
     model = Note
-    fields = ['title', 'url', 'image', 'description']
+    fields = ['title', 'body']
     template_name = 'create.html'
 
     def form_valid(self, form):

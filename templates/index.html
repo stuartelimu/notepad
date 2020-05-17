@@ -2,15 +2,33 @@
 
 {% block content %}
 
-<ul>
+<div class="columns">
   {% for note in notes %}
-  <li><a href="{{ note.get_absolute_url }}">{{ note.title }} - {{ note.timestamp|date }}</a></li>
+  <div class="column is-one-third">
+  <div class="card">
+      <header class="card-header">
+        <p class="card-header-title">
+          {{ note.title }}
+        </p>
+        
+      </header>
+      <div class="card-content">
+        <div class="content">
+          {{ note.body|truncatewords_html:15 }}
+          <br>
+          <time datetime="2016-1-1">{{ note.updated_at|time:"H:i" }} - {{ note.updated_at|date }}</time>
+        </div>
+      </div>
+      <footer class="card-footer">
+        <a href="{{ note.get_absolute_url }}" class="card-footer-item">Edit</a>
+        <a href="#" class="card-footer-item">Delete</a>
+      </footer>
+    </div>
+  </div>
   {% empty %}
   <li>No notes</li>
   {% endfor %}
-</ul>
 
-<a href="{% url 'notes:create' %}">Create Note</a>
-
+</div>
 
 {% endblock content %}
