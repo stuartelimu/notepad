@@ -1,15 +1,90 @@
 {% extends 'base.html' %}
 
-{% block title %} - Create{% endblock title %}
+{% load widget_tweaks %}
+
+{% block title %} - {{title}}{% endblock title %}
 
 {% block content %}
+<h1 class="title">{{title}} Note</h1>
+<div class="columns">
+  <div class="column is-half">
 
-<form action="." method="post" enctype="multipart/form-data">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Submit</button>
-</form>
+    <form action="." method="post">
+      {% csrf_token %}
+    
+      {% for hidden_field in form.hidden_fields %}
+        {{ hidden_field }}
+      {% endfor %}
+    
+      {% if form.non_field_errors %}
+    
+      <div class="notification is-danger is-light">
+          <button class="delete"></button>
+          {% for error in form.non_field_errors %}
+            {{ error }}
+          {% endfor %}
+        </div>
+        
+      {% endif %}
+    
+      {% for field in form.visible_fields %}
+        <div class="field">
+          {{ field.label_tag }}
+    
+          <div class="control has-icons-right">
+          {% if form.is_bound %}
+            {% if field.errors %}
+              {% render_field field class="input is-danger" %}
+              <span class="icon is-small is-right">
+                <i class="fas fa-exclamation-triangle"></i>
+              </span>
+              {% for error in field.errors %}
+                <p class="help is-danger">
+                  {{ error }}
+                </p>
+              {% endfor %}
+            {% else %}
+              {% render_field field class="input is-success" %}
+              <span class="icon is-small is-right">
+                <i class="fas fa-check"></i>
+              </span>
+            {% endif %}
+          {% else %}
+            {% render_field field class="input" %}
+          {% endif %}
+          </div>
+          {% if field.help_text %}
+            <small class="help">{{ field.help_text }}</small>
+          {% endif %}
+        </div>
+      {% endfor %}
+    
+      <div class="field is-grouped">
+        <div class="control">
+          <button type="submit" class="button is-link">Submit</button>
+        </div>
+        <div class="control">
+          <a href="{% url 'notes:notes' %}" class="button is-link is-light">Cancel</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
 
-<a href="{% url 'notes:notes' %}">Cancel</a>
+
+
+<script>
+
+document.addEventListener('DOMContentLoaded', () => {
+  (document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
+    $notification = $delete.parentNode;
+
+    $delete.addEventListener('click', () => {
+      $notification.parentNode.removeChild($notification);
+    });
+  });
+});
+
+</script>
 
 {% endblock content %}
