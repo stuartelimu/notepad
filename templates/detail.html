@@ -2,17 +2,31 @@
 
 {% block content %}
 
-<h4>{{ note.title }}</h4>
-<p>{{ note.timestamp }}</p>
+<div class="columns">
+    <div class="column">
 
-{% if note.url %}
-{{ note.url }}
-{% endif %}
+        <h1 class="title">{{ note.title }}</h1>
+        <p>{{ note.timestamp }}</p>
+        
+        <div class="content">
+            {{note.body}}
+        </div>
+    </div>
+</div>
 
-{{ note.image }}
+<div class="level">
+    <div class="level-left">
+        <div class="level-item">
+            <div class="card column">
+            <a class="title is-6" href="{% url 'notes:notes' %}">
+            <span class="icon has-text-info">
+                <i class="fas fa-arrow-left"></i>
+            </span>
+            Back
+            </a>
+        </div>
+        </div>
+    </div>
+</div>
 
-<p>{{ note.description }}</p>
-<a href="{% url 'notes:update' note.pk %}">Edit</a>
-<a href="{% url 'notes:delete' note.pk %}" style="color: red; padding-left: 15px;">Delete</a> <br>
-<a href="{% url 'notes:notes' %}">Back</a>
 {% endblock content %}
