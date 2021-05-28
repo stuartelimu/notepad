@@ -19,6 +19,9 @@ Change into this directory, create and activate a virtual environment. Here I'm 
 ```
 cd notepad
 virtualenv env && source env/bin/activate
+
+# for windows 
+virtualenv env && env\Scripts\activate
 ```
 
 Install the packages from the `requirements.txt` file
